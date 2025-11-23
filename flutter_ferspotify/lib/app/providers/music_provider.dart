@@ -4,7 +4,7 @@ import '../../utils/constans.dart';
 import '../models/song_model.dart';
 import '../models/favorite_response_model.dart';
 import '../models/like_responsive_model.dart';
-import '../models/play_responsive_model.dart';
+import '../models/play_response_model.dart';
 
 /// Proveedor para manejar la música.
 /// Incluye métodos para listar, filtrar, buscar y reproducir canciones.
