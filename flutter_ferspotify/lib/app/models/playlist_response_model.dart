@@ -1,36 +1,37 @@
 import 'playlist_model.dart';
 
 /// Modelo que representa la respuesta al crear una playlist.
-class PlaylistResponseModel {
+class PlaylistResponse {
   final String message;
-  final PlaylistModel data;
+  final Playlist data;
 
-  PlaylistResponseModel({
+  PlaylistResponse({
     required this.message,
     required this.data,
   });
 
-  /// Convierte un JSON a [PlaylistResponseModel].
+  /// Convierte un JSON a [PlaylistResponse].
   /// Ejemplo de JSON:
   /// {
   ///   "message": "Lista creada exitosamente",
   ///   "data": { ... } // PlaylistModel
   /// }
-  factory PlaylistResponseModel.fromJson(Map<String, dynamic> json) {
+  factory PlaylistResponse.fromJson(Map<String, dynamic> json) {
     print("🟢 [PlaylistResponseModel] Parseando JSON: $json");
-    return PlaylistResponseModel(
+
+    return PlaylistResponse(
       message: json['message'] ?? '',
-      data: PlaylistModel.fromJson(json['data'] ?? {}),
+      data: Playlist.fromJson(json['data'] ?? {}),
     );
   }
 
-  /// Convierte el objeto [PlaylistResponseModel] a JSON.
+  /// Convierte el objeto [PlaylistResponse] a JSON.
   Map<String, dynamic> toJson() {
     final json = {
       "message": message,
       "data": data.toJson(),
     };
-    print("🟡 [PlaylistResponseModel] Convirtiendo a JSON: $json");
+    print("🟡 [PlaylistResponse] Convirtiendo a JSON: $json");
     return json;
   }
 }

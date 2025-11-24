@@ -22,9 +22,10 @@ class FavoriteResponseModel {
   /// }
   factory FavoriteResponseModel.fromJson(Map<String, dynamic> json) {
     print("🟢 [FavoriteResponseModel] Parseando JSON: $json");
+
     return FavoriteResponseModel(
       message: json['message'] ?? '',
-      data: (json['data'] as Map<String, dynamic>? ?? {}),
+      data: json['data'] ?? {},
     );
   }
 

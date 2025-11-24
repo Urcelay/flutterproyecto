@@ -1,5 +1,5 @@
 /// Modelo que representa un usuario en el sistema.
-/// Este modelo se usará para mapear la respuesta JSON
+/// Este modelo se usará para mapear la respuesta JSON 
 /// del backend cuando se realicen operaciones de autenticación u otros endpoints.
 class UserModel {
   final int id;
@@ -16,8 +16,8 @@ class UserModel {
   /// Ejemplo de JSON:
   /// {
   ///   "id": 2,
-  ///   "name": "Juan",
-  ///   "email": "juan@email.com"
+  ///   "name": "Prof. Ferne Hoeger",
+  ///   "email": "admin@admin.com"
   /// }
   factory UserModel.fromJson(Map<String, dynamic> json) {
     print("🟢 [UserModel] Parseando JSON del usuario: $json");
@@ -40,5 +40,3 @@ class UserModel {
     return json;
   }
 }
-
-

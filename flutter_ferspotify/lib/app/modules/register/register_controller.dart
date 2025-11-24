@@ -14,57 +14,46 @@ class RegisterController extends GetxController {
 
   /// Método para registrar usuario
   Future<void> register() async {
-    if (name.value.isEmpty ||
-        email.value.isEmpty ||
-        password.value.isEmpty ||
-        confirmPassword.value.isEmpty) {
+    if (name.value.isEmpty || email.value.isEmpty || password.value.isEmpty || confirmPassword.value.isEmpty) {
       Get.snackbar("Error", "Por favor, completa todos los campos");
       return;
     }
 
-  //validacion
-  if (password.value != confirmPassword.value) {
-    Get.snackbar("Error", "Las contraseñas no coinciden");
-    return;
-  }
+    // Validación de contraseñas
+    if (password.value != confirmPassword.value) {
+      Get.snackbar("Error", "Las contraseñas no coinciden");
+      return;
+    }
 
     try {
       isLoading.value = true;
-      print(
-        "📝 Enviando registro con: ${name.value}, ${email.value}, ${password.value}",
-      );
+      print("📤 Enviando registro con: ${name.value}, ${email.value}, ${password.value}");
 
-      // Llamada al AuthProvider (ajusta el método si tu API usa otra firma)
+      // Llamada al AuthProvider
       final response = await AuthProvider.register(
         name.value,
         email.value,
         password.value,
       );
 
-      print("✅ Registro correcto: ${response.toString()}");
-
-      // Guardar token y user_id en SharedPreferences / Storage
       if (response != null) {
-      print("✅ Login correcto: ${response.toJson()}");
+        print("✅ Login correcto: ${response.toJson()}");
 
-      // Guardar token y user_id
-      await AuthStorage.saveAuthData(
-        token: response.token ?? "",
-        userId: response.user?.id ?? 0,
-      );
+        // Guardar token y user_id
+        await AuthStorage.saveAuthData(
+          token: response.token ?? "",
+          userId: response.user?.id ?? 0,
+        );
 
-      // Navegar al Home
-      Get.offAllNamed(AppRoutes.HOME);
-    } else {
-      print("❌ Login fallido: respuesta nula");
-      Get.snackbar("Error", "No se pudo iniciar sesión");
-    }
+        // Navegar al Home
+        Get.offAllNamed(AppRoutes.HOME);
+      } else {
+        print("❌ Login fallido: respuesta nula");
+        Get.snackbar("Error", "No se pudo iniciar sesión");
+      }
     } catch (e) {
       print("❌ Error en registro: $e");
-      Get.snackbar(
-        "Error",
-        "No se pudo registrar el usuario o hubo un error en el servidor",
-      );
+      Get.snackbar("Error", "No se pudo registrar. Intenta nuevamente");
     } finally {
       isLoading.value = false;
     }

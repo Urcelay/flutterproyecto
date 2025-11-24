@@ -1,26 +1,25 @@
-/// Modelo simple para respuestas que solo contienen un mensaje.
-class SimpleResponseModel {
+/// Modelo genérico para respuestas simples que solo contienen un mensaje.
+class SimpleResponse {
   final String message;
 
-  SimpleResponseModel({required this.message});
+  SimpleResponse({required this.message});
 
-  /// Convierte un JSON a [SimpleResponseModel].
+  /// Convierte un JSON a [SimpleResponse].
   /// Ejemplo:
   /// {
   ///   "message": "Lista eliminada correctamente"
   /// }
-  factory SimpleResponseModel.fromJson(Map<String, dynamic> json) {
+  factory SimpleResponse.fromJson(Map<String, dynamic> json) {
     print("🟢 [SimpleResponseModel] Parseando JSON: $json");
-    return SimpleResponseModel(
+
+    return SimpleResponse(
       message: json['message'] ?? '',
     );
   }
 
-  /// Convierte el objeto [SimpleResponseModel] a JSON.
+  /// Convierte el objeto [SimpleResponse] a JSON.
   Map<String, dynamic> toJson() {
-    final json = {
-      "message": message,
-    };
+    final json = {"message": message};
     print("🟡 [SimpleResponseModel] Convirtiendo a JSON: $json");
     return json;
   }

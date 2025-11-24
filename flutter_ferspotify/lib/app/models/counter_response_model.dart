@@ -1,26 +1,27 @@
 import 'song_model.dart';
 
 /// Modelo que representa la respuesta al dar "like" a una canción.
-class LikeResponseModel {
+class CounterResponse {
   final String message;
-  final SongModel data;
+  final Song data;
 
-  LikeResponseModel({
+  CounterResponse({
     required this.message,
     required this.data,
   });
 
-  /// Convierte un JSON a [LikeResponseModel].
+  /// Convierte un JSON a [CounterResponse].
   /// Ejemplo de JSON:
   /// {
   ///   "message": "Like registrado",
   ///   "data": { ... } // SongModel
   /// }
-  factory LikeResponseModel.fromJson(Map<String, dynamic> json) {
+  factory CounterResponse.fromJson(Map<String, dynamic> json) {
     print("🟢 [LikeResponseModel] Parseando JSON: $json");
-    return LikeResponseModel(
+
+    return CounterResponse(
       message: json['message'] ?? '',
-      data: SongModel.fromJson(json['data'] ?? {}),
+      data: Song.fromJson(json['data'] ?? {}),
     );
   }
 

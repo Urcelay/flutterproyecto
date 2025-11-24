@@ -29,11 +29,11 @@ class AuthStorage {
     return prefs.getInt(_userIdKey);
   }
 
-  /// Borrar datos de autenticación (por ejemplo, en logout)
+  /// Limpiar datos de autenticación
   static Future<void> clearAuthData() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(_tokenKey);
     await prefs.remove(_userIdKey);
-    print("🧹 [AuthStorage] Datos de autenticación borrados");
+    print("🗑️ [AuthStorage] Datos limpiados");
   }
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'app/routes/app_pages.dart';
-import 'app/modules/home/home_binding.dart'; // ⬅️ IMPORTANTE importar el binding
 
 void main() {
   runApp(const MyApp());
@@ -16,10 +15,30 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Music App',
 
-      // ⬅️ AÑADIR ESTO
-      initialBinding: HomeBinding(),
+      // 👇 Tema claro
+      theme: ThemeData.light().copyWith(
+        primaryColor: Colors.deepPurple,
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.deepPurple,
+          foregroundColor: Colors.white,
+        ),
+      ),
 
-      // ⬅️ Mantienes tus rutas
+      // 👇 Tema oscuro
+      darkTheme: ThemeData.dark().copyWith(
+        appBarTheme: const AppBarTheme(
+          backgroundColor: Colors.black87,
+          foregroundColor: Colors.white,
+        ),
+        colorScheme: const ColorScheme.dark(
+          primary: Colors.blueAccent,
+          secondary: Colors.tealAccent,
+        ),
+      ),
+
+      // 👇 Controlado por el botón en HomeView
+      themeMode: ThemeMode.system,
+
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
     );

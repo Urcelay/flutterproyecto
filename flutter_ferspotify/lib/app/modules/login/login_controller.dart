@@ -19,25 +19,26 @@ class LoginController extends GetxController {
 
     try {
       isLoading.value = true;
-      print("🚀 Enviando login con: ${email.value}, ${password.value}");
+      print("📤 Enviando login con: ${email.value}, ${password.value}");
 
       // Llamada al AuthProvider
       final response = await AuthProvider.login(email.value, password.value);
+
       if (response != null) {
-      print("✅ Login correcto: ${response.toJson()}");
+        print("✅ Login correcto: ${response.toJson()}");
 
-      // Guardar token y user_id
-      await AuthStorage.saveAuthData(
-        token: response.token ?? "",
-        userId: response.user?.id ?? 0,
-      );
+        // Guardar token y user_id
+        await AuthStorage.saveAuthData(
+          token: response.token ?? "",
+          userId: response.user?.id ?? 0,
+        );
 
-      // Navegar al Home
-      Get.offAllNamed(AppRoutes.HOME);
-    } else {
-      print("❌ Login fallido: respuesta nula");
-      Get.snackbar("Error", "No se pudo iniciar sesión");
-    }
+        // Navegar al Home
+        Get.offAllNamed(AppRoutes.HOME);
+      } else {
+        print("❌ Login fallido: respuesta nula");
+        Get.snackbar("Error", "No se pudo iniciar sesión");
+      }
     } catch (e) {
       print("❌ Error en login: $e");
       Get.snackbar("Error", "Credenciales inválidas o error en el servidor");

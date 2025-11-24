@@ -1,139 +1,232 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:animate_do/animate_do.dart';
 
-import '../favorites/favorites_view.dart';
-import '../playlists/playlists_view.dart';
 import '../search/search_view.dart';
+import '../favorites/favorites_view.dart';
+import '../playlists/playlist_view.dart';
 import '../song_list/song_list_view.dart';
 import 'home_controller.dart';
 
-/// Vista principal con BottomNavigationBar
-/// Tab 0 = Home con categorías, artistas y álbumes
-/// Tab 1 = Buscar
-/// Tab 2 = Favoritos
-/// Tab 3 = Listas
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      return Scaffold(
-        appBar: AppBar(title: const Text("AnderMusicfy")),
-        body: IndexedStack(
-          index: controller.selectedIndex.value,
-          children: [
-            _buildHomeTab(), // Tab Home
-            const SearchView(), // Tab Buscar
-            const FavoritesView(), // Tab Favoritos
-            const PlaylistView(), // Tab Listas
-          ],
-        ),
-        bottomNavigationBar: BottomNavigationBar(
-          currentIndex: controller.selectedIndex.value,
-          onTap: controller.changeTab,
-          type: BottomNavigationBarType.fixed,
-          items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-            BottomNavigationBarItem(icon: Icon(Icons.search), label: "Buscar"),
-            BottomNavigationBarItem(icon: Icon(Icons.favorite), label: "Favoritos"),
-            BottomNavigationBarItem(icon: Icon(Icons.playlist_play), label: "Listas"),
-          ],
-        ),
-      );
-    });
-  }
+    final tabs = [
+      Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
 
-  /// Construcción del Tab Home con carruseles de categorías, artistas y álbumes
-  Widget _buildHomeTab() {
-    return Obx(() {
-      if (controller.isLoading.value) {
-        return const Center(child: CircularProgressIndicator());
-      }
-
-      return SingleChildScrollView(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildSection(
-              "Categorías",
-              controller.categories
-                  .map((c) => {"id": c.id, "name": c.name})
-                  .toList(),
-              "category",
-            ),
-            _buildSection(
-              "Artistas",
-              controller.artists
-                  .map((a) => {"id": a.id, "name": a.name})
-                  .toList(),
-              "artist",
-            ),
-            _buildSection(
-              "Álbumes",
-              controller.albums
-                  .map((al) => {"id": al.id, "name": al.name})
-                  .toList(),
-              "album",
-            ),
-          ],
-        ),
-      );
-    });
-  }
-
-  /// Construir sección horizontal (categorías/artistas/álbumes)
-  Widget _buildSection(
-    String title,
-    List<Map<String, dynamic>> items,
-    String filterType,
-  ) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            title,
-            style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-        ),
-        SizedBox(
-          height: 180,
-          child: ListView.builder(
-            scrollDirection: Axis.horizontal,
-            itemCount: items.length,
-            itemBuilder: (_, index) {
-              final item = items[index];
-              return GestureDetector(
-                onTap: () {
-                  Get.to(
-                    () => SongListView(
-                      filterType: filterType,
-                      filterId: item["id"],
-                      filterName: item["name"],
-                    ),
-                  );
-                },
-                child: Card(
-                  margin: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Container(
-                    width: 150,
-                    alignment: Alignment.center,
-                    padding: const EdgeInsets.all(8),
-                    child: Text(
-                      item["name"],
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                    ),
+        return SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Título
+              FadeInDown(
+                duration: const Duration(milliseconds: 600),
+                child: const Padding(
+                  padding: EdgeInsets.all(12),
+                  child: Text(
+                    "Categorías",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                   ),
                 ),
-              );
-            },
+              ),
+
+              // Categorías
+              SizedBox(
+                height: 180,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: controller.categories.length,
+                  itemBuilder: (context, index) {
+                    final category = controller.categories[index];
+                    return FadeInLeft(
+                      delay: Duration(milliseconds: 100 * index),
+                      child: GestureDetector(
+                        onTap: () => Get.to(
+                          () => SongListView(
+                            filterType: "category",
+                            filterId: category.id,
+                          ),
+                        ),
+                        child: Card(
+                          margin: const EdgeInsets.all(8),
+                          child: Container(
+                            width: 140,
+                            alignment: Alignment.center,
+                            child: Text(
+                              category.name,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+              // Artistas
+              FadeInDown(
+                duration: const Duration(milliseconds: 600),
+                child: const Padding(
+                  padding: EdgeInsets.all(12),
+                  child: Text(
+                    "Artistas",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 180,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: controller.artists.length,
+                  itemBuilder: (context, index) {
+                    final artist = controller.artists[index];
+                    return FadeInRight(
+                      delay: Duration(milliseconds: 100 * index),
+                      child: GestureDetector(
+                        onTap: () => Get.to(
+                          () => SongListView(
+                            filterType: "artist",
+                            filterId: artist.id,
+                          ),
+                        ),
+                        child: Card(
+                          margin: const EdgeInsets.all(8),
+                          child: Container(
+                            width: 140,
+                            alignment: Alignment.center,
+                            child: Text(
+                              artist.name,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+
+              // Álbumes
+              FadeInDown(
+                duration: const Duration(milliseconds: 600),
+                child: const Padding(
+                  padding: EdgeInsets.all(12),
+                  child: Text(
+                    "Álbumes",
+                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 180,
+                child: ListView.builder(
+                  scrollDirection: Axis.horizontal,
+                  itemCount: controller.albums.length,
+                  itemBuilder: (context, index) {
+                    final album = controller.albums[index];
+                    return FadeInUp(
+                      delay: Duration(milliseconds: 100 * index),
+                      child: GestureDetector(
+                        onTap: () => Get.to(
+                          () => SongListView(
+                            filterType: "album",
+                            filterId: album.id,
+                          ),
+                        ),
+                        child: Card(
+                          margin: const EdgeInsets.all(8),
+                          child: Container(
+                            width: 140,
+                            alignment: Alignment.center,
+                            child: Text(
+                              album.name,
+                              textAlign: TextAlign.center,
+                              style: const TextStyle(fontSize: 16),
+                            ),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      }),
+      const SearchsView(),
+      const FavoritesView(),
+      const PlaylistView(),
+    ];
+
+    return Obx(
+      () => Scaffold(
+        appBar: AppBar(
+          title: FadeInDown(
+            duration: const Duration(milliseconds: 500),
+            child: const Text("🎵 AnderMusicfy"),
+          ),
+          actions: [
+            // Botón cambiar tema
+            FadeInRight(
+              duration: const Duration(milliseconds: 500),
+              child: IconButton(
+                icon: const Icon(Icons.brightness_6),
+                onPressed: () {
+                  Get.changeThemeMode(
+                    Get.isDarkMode ? ThemeMode.light : ThemeMode.dark,
+                  );
+                },
+              ),
+            ),
+            // Botón logout
+            FadeInRight(
+              duration: const Duration(milliseconds: 700),
+              child: IconButton(
+                icon: const Icon(Icons.logout),
+                onPressed: () {
+                  // Aquí implementaremos logout real con AuthStorage
+                  Get.snackbar("Logout", "Sesión cerrada correctamente");
+                  Get.offAllNamed("/login");
+                },
+              ),
+            ),
+          ],
+        ),
+        body: tabs[controller.currentIndex.value],
+        bottomNavigationBar: FadeInUp(
+          duration: const Duration(milliseconds: 500),
+          child: BottomNavigationBar(
+            currentIndex: controller.currentIndex.value,
+            onTap: controller.changeTab,
+            type: BottomNavigationBarType.fixed,
+            items: const [
+              BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.search),
+                label: "Buscar",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.favorite),
+                label: "Favoritos",
+              ),
+              BottomNavigationBarItem(
+                icon: Icon(Icons.playlist_play),
+                label: "Listas",
+              ),
+            ],
           ),
         ),
-      ],
+      ),
     );
   }
 }

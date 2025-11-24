@@ -17,7 +17,7 @@ class AuthResponseModel {
   /// Ejemplo de JSON:
   /// {
   ///   "message": "Usuario registrado correctamente",
-  ///   "token": "48l4QqRtXrmBHiqtcPI10HGR7EknivrtJktY0oah9fIa5739128",
+  ///   "token": "48|4QqRtXrmBHiqtCPI10HGR7EknivrtJKtYoOah9fIa5739128",
   ///   "user": { ... }
   /// }
   factory AuthResponseModel.fromJson(Map<String, dynamic> json) {
